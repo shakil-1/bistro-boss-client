@@ -9,7 +9,7 @@ const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const UpdateItem = () => {
-  const { _id, name, category, price, recipe, image:imge1 } = useLoaderData();
+  const { _id, name, category, price, recipe } = useLoaderData();
   const { register, handleSubmit, reset } = useForm();
   const axiosPublic = useAxiosPublic();
   const axiosSecure = useAxiosSecure();
@@ -19,8 +19,8 @@ const UpdateItem = () => {
     const imageFile = { image: data.image[0] };
     const res = await axiosPublic.post(image_hosting_api, imageFile, {
       headers: {
-        "content-type": "multipart/form-data"
-      }
+        "content-type": "multipart/form-data",
+      },
     });
 
     if (res.data.success) {
@@ -34,7 +34,7 @@ const UpdateItem = () => {
       const menuRes = await axiosSecure.patch(`/menu/${_id}`, menuItem);
 
       if (menuRes.data.modifiedCount > 0) {
-
+        reset();
         Swal.fire({
           position: "top-end",
           icon: "success",
@@ -118,7 +118,7 @@ const UpdateItem = () => {
 
             <div className="form-control w-full my-6">
               <input
-                   {...register("image", { required: true })}
+                {...register("image", { required: true })}
                 type="file"
                 className="file-input w-full max-w-xs"
               />
